@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -44,6 +43,10 @@
     </style>
 </head>
 <body>
+
+    <!-- Haqiqiy, judayam go'zal va mayin MP3 piano musiqasi (Tashqi xavfsiz serverdan) -->
+    <audio id="romanticMusic" src="https://soundhelix.com" loop preload="auto"></audio>
+
     <div class="sparkle-container" id="sparkleBox"></div>
     <div class="container">
         <div class="subtitle" id="subText">Men uchun qadrli boʻlgan insonim, hayotim mazmuni, Nilufarimmm... ✨</div>
@@ -52,44 +55,30 @@
             <button class="btn" id="yes" onclick="celebrate()">HA</button>
             <button class="btn" id="no" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton(event)">YOʻQ</button>
         </div>
-        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Nilufarim, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
+        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Xayotim!, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
     </div>
     <script>
         function moveButton(event) {
             if(event) event.preventDefault();
             var btn = document.getElementById('no');
-            var screenWidth = window.innerWidth;
-            var screenHeight = window.innerHeight;
-            var maxX = screenWidth - btn.offsetWidth - 20;
-            var maxY = screenHeight - btn.offsetHeight - 20;
-            var randomX = Math.random() * maxX;
-            var randomY = Math.random() * maxY;
+            var screenWidth = window.innerWidth; var screenHeight = window.innerHeight;
+            var maxX = screenWidth - btn.offsetWidth - 20; var maxY = screenHeight - btn.offsetHeight - 20;
+            var randomX = Math.random() * maxX; var randomY = Math.random() * maxY;
             if(randomX < 20) randomX = 20; if(randomY < 20) randomY = 20;
             btn.style.left = randomX + 'px'; btn.style.top = randomY + 'px';
         }
         function random(min, max) { return Math.random() * (max - min) + min; }
-        let audioCtx;
-        function playNote(frequency, startTime, duration) {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(frequency, startTime);
-            gain.gain.setValueAtTime(0, startTime); gain.gain.linearRampToValueAtTime(0.12, startTime + 0.05); 
-            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - 0.05);
-            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(startTime); osc.stop(startTime + duration);
-        }
-        function playRomanceLoop() {
-            if(!audioCtx) return;
-            let now = audioCtx.currentTime; let tempo = 0.45; 
-            let melody = [329.63, 392.00, 523.25, 587.33, 659.25, 587.33, 523.25, 392.00, 349.23, 440.00, 587.33, 659.25, 698.46, 659.25, 587.33, 440.00];
-            melody.forEach((note, index) => { playNote(note, now + (index * tempo), tempo * 0.9); });
-            setTimeout(playRomanceLoop, melody.length * tempo * 1000);
-        }
+        
         function celebrate() {
             document.getElementById('subText').style.display = 'none'; document.getElementById('mainTitle').style.display = 'none';
             document.getElementById('btnContainer').style.display = 'none'; document.getElementById('no').style.display = 'none';
             document.getElementById('successText').style.display = 'block';
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            playRomanceLoop();
+            
+            // Haqiqiy chiroyli musiqani ijro etish
+            var music = document.getElementById('romanticMusic');
+            music.volume = 0.4; // Ovoz balandligi (mayin)
+            music.play().catch(function(e) { console.log("Ovoz bloklandi"); });
+
             var sparkleBox = document.getElementById('sparkleBox'); sparkleBox.style.display = 'block';
             for (var i = 0; i < 40; i++) {
                 var sparkle = document.createElement('div'); sparkle.className = 'sparkle animate-sparkle';
