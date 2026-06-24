@@ -13,41 +13,45 @@
             justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: relative;
         }
         
-        /* ASOSIY KONTEYNER - TUGMA FAQAT SHU ICHIDA QOCHADI */
+        /* ASOSIY OQ RAMKA (KONTEYNER) */
         .container {
-            background-color: rgba(255, 255, 255, 0.85); padding: 30px 20px; border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.9); padding: 30px 20px; border-radius: 24px;
             box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); backdrop-filter: blur(10px); 
             width: 90%; max-width: 360px; position: relative; z-index: 5;
-            height: 380px; /* Balandlik belgilandi, tugma pastga tushib ketmaydi */
+            height: 420px;
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
         }
         .subtitle { color: #751a3d; font-size: 18px; font-style: italic; margin-bottom: 15px; line-height: 1.5; }
-        h1 { color: #c2185b; font-size: 28px; margin-top: 0; margin-bottom: 30px; letter-spacing: 0.5px; }
+        h1 { color: #c2185b; font-size: 28px; margin-top: 0; margin-bottom: 20px; letter-spacing: 0.5px; }
         
-        /* TUGMALAR JONLANGAN HUDUD */
+        /* TUGMALAR FAQAT SHU OQ HUDUD ICHIDA YURADI */
         .btn-box { 
             position: relative; 
             width: 100%; 
-            height: 180px; /* Tugma faqat shu oq maydon ichida yura oladi */
+            height: 200px; 
+            margin-top: 10px;
         }
         .btn { 
-            padding: 12px 30px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; 
+            width: 110px; /* Tugmalar o'lchami ixcham va bir xil qilindi */
+            height: 45px;
+            font-size: 18px; font-weight: bold; border: none; border-radius: 50px; 
             font-family: 'Times New Roman', Times, serif; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
             cursor: pointer; touch-action: none; position: absolute;
+            display: flex; justify-content: center; align-items: center;
         }
         
-        /* Boshlang'ich holatda aniq joylashuv (Oq blok markazida) */
+        /* Boshlang'ich holatda tugmalar chiroyli va tartibli turadi */
         #yes { 
             background-color: #2ecc71; color: white; 
-            left: 15%; top: 40px; z-index: 6; 
+            left: 15%; top: 60px; z-index: 6; 
         }
         #no { 
             background-color: #ff4d6d; color: white; 
-            right: 15%; top: 40px; z-index: 7; 
+            right: 15%; top: 60px; z-index: 7; 
             transition: all 0.1s ease-out;
         }
         
-        .success-message { display: none; color: #ff1493; font-size: 28px; font-weight: bold; line-height: 1.4; margin-top: 50px; }
+        .success-message { display: none; color: #ff1493; font-size: 28px; font-weight: bold; line-height: 1.4; margin-top: 60px; }
         .sparkle-container { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
         .sparkle { position: absolute; width: 8px; height: 8px; background-color: #ffd700; border-radius: 50%; box-shadow: 0 0 10px #ffd700, 0 0 20px #ffeb3b; opacity: 0; }
         @keyframes flyUp {
@@ -61,6 +65,7 @@
 </head>
 <body>
 
+    <!-- Telefonlar uchun maxsus eng ishonchli va chiroyli mayin musiqa -->
     <audio id="romanticMusic" src="https://soundhelix.com" loop preload="auto"></audio>
 
     <div class="sparkle-container" id="sparkleBox"></div>
@@ -76,30 +81,42 @@
             <button class="btn" id="no" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton(event)">YOʻQ</button>
         </div>
         
-        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Xayotim, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
+        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Nilufarim, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
     </div>
 
     <script>
-        // FAQAT OQ BLOK (BTN-BOX) ICHIDA VA "HA" ATROFIDA QOCHISH
+        // "YO'Q" TUGMASINI "HA" NING USTIGA CHIQARMASDAN FAQAT ATROFDA QOCHIRISH
         function moveButton(event) {
             if(event) event.preventDefault();
             
             var container = document.getElementById('btnContainer');
+            var yesBtn = document.getElementById('yes');
             var noBtn = document.getElementById('no');
             
-            // Oq qutining (btn-box) kengligi va balandligi
-            var boxWidth = container.clientWidth;
-            var boxHeight = container.clientHeight;
+            var maxX = container.clientWidth - noBtn.offsetWidth;
+            var maxY = container.clientHeight - noBtn.offsetHeight;
             
-            // Tugma oq quti devorlaridan chiqib ketmasligi uchun maksimal chegaralar
-            var maxX = boxWidth - noBtn.offsetWidth;
-            var maxY = boxHeight - noBtn.offsetHeight;
+            var randomX, randomY;
+            var isTooClose = true;
             
-            // Faqat shu oq quti ichida ixtiyoriy koordinata hisoblash
-            var randomX = Math.random() * maxX;
-            var randomY = Math.random() * maxY;
+            // "HA" tugmasining koordinatalarini aniqlash
+            var yesLeft = yesBtn.offsetLeft;
+            var yesTop = yesBtn.offsetTop;
             
-            // Tugmani oq quti ichida surish (absolut rejimda)
+            // "YO'Q" tugmasi "HA"ning ustiga mutloq chiqib qolmasligini tekshirish tsikli
+            while (isTooClose) {
+                randomX = Math.random() * maxX;
+                randomY = Math.random() * maxY;
+                
+                // Masofani o'lchash (Tugmalar ustma-ust tushmasligi shart)
+                var distanceX = Math.abs(randomX - yesLeft);
+                var distanceY = Math.abs(randomY - yesTop);
+                
+                if (distanceX > 90 || distanceY > 40) {
+                    isTooClose = false;
+                }
+            }
+            
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
@@ -112,8 +129,8 @@
             document.getElementById('successText').style.display = 'block';
             
             var music = document.getElementById('romanticMusic');
-            music.volume = 0.4;
-            music.play().catch(function(e) { console.log("Ovoz bloklandi"); });
+            music.volume = 0.5;
+            music.play().catch(function(e) { console.log("Ovoz cheklandi"); });
 
             var sparkleBox = document.getElementById('sparkleBox'); 
             sparkleBox.style.display = 'block';
