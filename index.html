@@ -19,17 +19,26 @@
         }
         .subtitle { color: #751a3d; font-size: 18px; font-style: italic; margin-bottom: 15px; line-height: 1.5; }
         h1 { color: #c2185b; font-size: 30px; margin-top: 0; margin-bottom: 25px; letter-spacing: 0.5px; }
-        .btn-box { display: flex; justify-content: center; align-items: center; height: 80px; position: relative; width: 100%; }
+        
+        /* TUGMALAR HUCHUN FORMAT */
+        .btn-box { 
+            display: flex; justify-content: center; align-items: center; 
+            height: 120px; position: relative; width: 100%; 
+        }
         .btn { 
             padding: 14px 35px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; 
             font-family: 'Times New Roman', Times, serif; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-            cursor: pointer; touch-action: none; 
+            cursor: pointer; touch-action: none; position: absolute;
         }
-        #yes { background-color: #2ecc71; color: white; position: relative; margin-right: 20px; }
+        
+        /* Boshlang'ich holatda tugmalar yonma-yon turadi */
+        #yes { background-color: #2ecc71; color: white; transform: translateX(-60px); z-index: 6; }
         #no { 
-            background-color: #ff4d6d; color: white; position: fixed; 
-            top: 55%; left: 55%; z-index: 999; transition: all 0.1s ease-out;
+            background-color: #ff4d6d; color: white; 
+            transform: translateX(60px); z-index: 7; 
+            transition: all 0.12s ease-out;
         }
+        
         .success-message { display: none; color: #ff1493; font-size: 32px; font-weight: bold; line-height: 1.4; }
         .sparkle-container { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
         .sparkle { position: absolute; width: 8px; height: 8px; background-color: #ffd700; border-radius: 50%; box-shadow: 0 0 10px #ffd700, 0 0 20px #ffeb3b; opacity: 0; }
@@ -44,7 +53,6 @@
 </head>
 <body>
 
-    <!-- Haqiqiy, judayam go'zal va mayin MP3 piano musiqasi (Tashqi xavfsiz serverdan) -->
     <audio id="romanticMusic" src="https://soundhelix.com" loop preload="auto"></audio>
 
     <div class="sparkle-container" id="sparkleBox"></div>
@@ -55,34 +63,65 @@
             <button class="btn" id="yes" onclick="celebrate()">HA</button>
             <button class="btn" id="no" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton(event)">YOʻQ</button>
         </div>
-        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Xayotim!, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
+        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Xayotim, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
     </div>
+
     <script>
+        // "HA" TUGMASINING ATROFIDA QOCHISH TIZIMI
         function moveButton(event) {
             if(event) event.preventDefault();
-            var btn = document.getElementById('no');
-            var screenWidth = window.innerWidth; var screenHeight = window.innerHeight;
-            var maxX = screenWidth - btn.offsetWidth - 20; var maxY = screenHeight - btn.offsetHeight - 20;
-            var randomX = Math.random() * maxX; var randomY = Math.random() * maxY;
-            if(randomX < 20) randomX = 20; if(randomY < 20) randomY = 20;
-            btn.style.left = randomX + 'px'; btn.style.top = randomY + 'px';
+            
+            var yesBtn = document.getElementById('yes');
+            var noBtn = document.getElementById('no');
+            
+            // "HA" tugmasining ekrandagi aniq o'rnini olish
+            var yesRect = yesBtn.getBoundingClientRect();
+            
+            // "HA" tugmasining markazi koordinatalari
+            var yesX = yesRect.left + (yesRect.width / 2);
+            var yesY = yesRect.top + (yesRect.height / 2);
+            
+            // "YO'Q" tugmasi "HA" atrofida qanchalik masofada aylanib yurishi (Radius)
+            var radius = 120; 
+            
+            // Tasodifiy burchak ostida yaqin atrofga surish
+            var angle = Math.random() * Math.PI * 2;
+            var randomX = yesX + Math.cos(angle) * radius - (noBtn.offsetWidth / 2);
+            var randomY = yesY + Math.sin(angle) * radius - (noBtn.offsetHeight / 2);
+            
+            // Ekran chetlaridan chiqib ketmaslik chorasi
+            if (randomX < 10) randomX = 10;
+            if (randomX > window.innerWidth - noBtn.offsetWidth - 10) randomX = window.innerWidth - noBtn.offsetWidth - 10;
+            if (randomY < 10) randomY = 10;
+            if (randomY > window.innerHeight - noBtn.offsetHeight - 10) randomY = window.innerHeight - noBtn.offsetHeight - 10;
+            
+            // Joylashuvni fixed rejimda o'rnatish
+            noBtn.style.position = 'fixed';
+            noBtn.style.transform = 'none'; // Boshlang'ich surilishni o'chirish
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
+
         function random(min, max) { return Math.random() * (max - min) + min; }
         
         function celebrate() {
-            document.getElementById('subText').style.display = 'none'; document.getElementById('mainTitle').style.display = 'none';
-            document.getElementById('btnContainer').style.display = 'none'; document.getElementById('no').style.display = 'none';
+            document.getElementById('subText').style.display = 'none'; 
+            document.getElementById('mainTitle').style.display = 'none';
+            document.getElementById('btnContainer').style.display = 'none'; 
+            document.getElementById('no').style.display = 'none';
             document.getElementById('successText').style.display = 'block';
             
-            // Haqiqiy chiroyli musiqani ijro etish
             var music = document.getElementById('romanticMusic');
-            music.volume = 0.4; // Ovoz balandligi (mayin)
+            music.volume = 0.4;
             music.play().catch(function(e) { console.log("Ovoz bloklandi"); });
 
-            var sparkleBox = document.getElementById('sparkleBox'); sparkleBox.style.display = 'block';
+            var sparkleBox = document.getElementById('sparkleBox'); 
+            sparkleBox.style.display = 'block';
             for (var i = 0; i < 40; i++) {
                 var sparkle = document.createElement('div'); sparkle.className = 'sparkle animate-sparkle';
-                sparkle.style.left = random(0, 100) + 'vw'; sparkle.style.animationDelay = random(0, 4) + 's'; sparkle.style.animationDuration = random(3, 5) + 's';
+                sparkle.style.left = random(0, 100) + 'vw'; 
+                sparkle.style.animationDelay = random(0, 4) + 's'; 
+                sparkle.style.animationDuration = random(3, 5) + 's';
                 var colors = ['#ffd700', '#ffeb3b', '#ffffff', '#ff69b4', '#ffb6c1'];
                 sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 var size = random(6, 10) + 'px'; sparkle.style.width = size; sparkle.style.height = size;
