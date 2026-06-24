@@ -13,7 +13,7 @@
             justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: relative;
         }
         
-        /* ASOSIY OQ RAMKA (KONTEYNER) */
+        /* ASOSIY OQ RAMKA - TUGMALAR FAQAT SHU ICHIDA YURADI */
         .container {
             background-color: rgba(255, 255, 255, 0.9); padding: 30px 20px; border-radius: 24px;
             box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4); backdrop-filter: blur(10px); 
@@ -24,7 +24,7 @@
         .subtitle { color: #751a3d; font-size: 18px; font-style: italic; margin-bottom: 15px; line-height: 1.5; }
         h1 { color: #c2185b; font-size: 28px; margin-top: 0; margin-bottom: 20px; letter-spacing: 0.5px; }
         
-        /* TUGMALAR FAQAT SHU OQ HUDUD ICHIDA YURADI */
+        /* TUGMALAR ERKIN HARAKATLANADIGAN OQ MAYDON */
         .btn-box { 
             position: relative; 
             width: 100%; 
@@ -32,7 +32,7 @@
             margin-top: 10px;
         }
         .btn { 
-            width: 110px; /* Tugmalar o'lchami ixcham va bir xil qilindi */
+            width: 110px; /* Ikkala tugma o'lchami bir xil va ixcham qilindi */
             height: 45px;
             font-size: 18px; font-weight: bold; border: none; border-radius: 50px; 
             font-family: 'Times New Roman', Times, serif; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
@@ -40,7 +40,7 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        /* Boshlang'ich holatda tugmalar chiroyli va tartibli turadi */
+        /* Boshlang'ich holatda chiroyli va tartibli joylashuv */
         #yes { 
             background-color: #2ecc71; color: white; 
             left: 15%; top: 60px; z-index: 6; 
@@ -65,8 +65,8 @@
 </head>
 <body>
 
-    <!-- Telefonlar uchun maxsus eng ishonchli va chiroyli mayin musiqa -->
-    <audio id="romanticMusic" src="https://soundhelix.com" loop preload="auto"></audio>
+    <!-- Dunyodagi eng go'zal va mayin romantik pianino musiqasi ulandi -->
+    <audio id="romanticMusic" src="https://archive.org" loop preload="auto"></audio>
 
     <div class="sparkle-container" id="sparkleBox"></div>
     
@@ -81,11 +81,11 @@
             <button class="btn" id="no" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton(event)">YOʻQ</button>
         </div>
         
-        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Nilufarim, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
+        <div class="success-message" id="successText">URAAAA! 🎉<br>Rahmat Xayotim, seni judayam yaxshi koʻraman! 🥰✨❤️</div>
     </div>
 
     <script>
-        // "YO'Q" TUGMASINI "HA" NING USTIGA CHIQARMASDAN FAQAT ATROFDA QOCHIRISH
+        // "YO'Q" TUGMASINI FAQAT OQ RAMKA ICHIDA VA "HA"ga TEGMASDAN QOCHIRISH
         function moveButton(event) {
             if(event) event.preventDefault();
             
@@ -99,20 +99,19 @@
             var randomX, randomY;
             var isTooClose = true;
             
-            // "HA" tugmasining koordinatalarini aniqlash
             var yesLeft = yesBtn.offsetLeft;
             var yesTop = yesBtn.offsetTop;
             
-            // "YO'Q" tugmasi "HA"ning ustiga mutloq chiqib qolmasligini tekshirish tsikli
+            // "HA" tugmasining ustiga mutloq chiqib qolmasligini tekshirish
             while (isTooClose) {
                 randomX = Math.random() * maxX;
                 randomY = Math.random() * maxY;
                 
-                // Masofani o'lchash (Tugmalar ustma-ust tushmasligi shart)
                 var distanceX = Math.abs(randomX - yesLeft);
                 var distanceY = Math.abs(randomY - yesTop);
                 
-                if (distanceX > 90 || distanceY > 40) {
+                // Masofa yetarli bo'lsa (ustma-ust tushmasa) tsikldan chiqadi
+                if (distanceX > 95 || distanceY > 42) {
                     isTooClose = false;
                 }
             }
@@ -128,8 +127,9 @@
             document.getElementById('btnContainer').style.display = 'none'; 
             document.getElementById('successText').style.display = 'block';
             
+            // Romantik musiqani juda mayin ovozda (0.4 balandlikda) chalish
             var music = document.getElementById('romanticMusic');
-            music.volume = 0.5;
+            music.volume = 0.4;
             music.play().catch(function(e) { console.log("Ovoz cheklandi"); });
 
             var sparkleBox = document.getElementById('sparkleBox'); 
